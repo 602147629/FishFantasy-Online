@@ -10,7 +10,7 @@ public class KBEMain : MonoBehaviour
 	// 在unity3d界面中可见选项
 	public bool isMultiThreads = true;
 	public string ip = "127.0.0.1";
-	public int port = 20013;
+	public int port = 3306;
 	public KBEngineApp.CLIENT_TYPE clientType = KBEngineApp.CLIENT_TYPE.CLIENT_TYPE_MINI;
 	public string persistentDataPath = "Application.persistentDataPath";
 	public bool syncPlayer = true;
@@ -33,6 +33,11 @@ public class KBEMain : MonoBehaviour
 	
 	public virtual void installEvents()
 	{
+	}
+
+	public virtual void uninstallEvents()
+	{
+
 	}
 	
 	public virtual void initKBEngine()
@@ -66,6 +71,7 @@ public class KBEMain : MonoBehaviour
 	{
 		MonoBehaviour.print("clientapp::OnDestroy(): begin");
 		KBEngineApp.app.destroy();
+		uninstallEvents();
 		MonoBehaviour.print("clientapp::OnDestroy(): end");
 	}
 	

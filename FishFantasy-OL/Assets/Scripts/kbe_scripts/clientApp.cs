@@ -10,7 +10,7 @@ public KBEngineApp gameapp = null;
 	// 在unity3d界面中可见选项
 	public bool isMultiThreads = true;
 	public string ip = "127.0.0.1";
-	public int port = 3306;
+	public int port = 20013;
 	public KBEngineApp.CLIENT_TYPE clientType = KBEngineApp.CLIENT_TYPE.CLIENT_TYPE_MINI;
 	public string persistentDataPath = "Application.persistentDataPath";
 	public bool syncPlayer = true;

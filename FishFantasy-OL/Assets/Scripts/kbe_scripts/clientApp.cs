@@ -5,7 +5,7 @@ using KBEngine;
 
 public class ClientApp : MonoBehaviour {
 
-public KBEngineApp gameapp = null;
+	public KBEngineApp gameapp = null;
 	
 	// 在unity3d界面中可见选项
 	public bool isMultiThreads = true;
@@ -40,8 +40,12 @@ public KBEngineApp gameapp = null;
 	{
 		KBEngine.Event.registerOut("onKicked", this, "onKicked");
 		KBEngine.Event.registerOut("onCreateAccountResult", this, "onCreateAccountResult");
+
 		KBEngine.Event.registerOut("onDisableConnect", this, "onDisableConnect");
 		KBEngine.Event.registerOut("onConnectStatus", this, "onConnectStatus");
+
+		KBEngine.Event.registerOut("onLoginFailed", this, "onLoginFailed");
+		KBEngine.Event.registerOut("onLoginSuccessfully", this, "onLoginSuccessfully");
 	}
 
 	void uninstallEvents()
@@ -79,8 +83,10 @@ public KBEngineApp gameapp = null;
 	void OnDestroy()
 	{
 		MonoBehaviour.print("clientapp::OnDestroy(): begin");
+
 		KBEngineApp.app.destroy();
 		uninstallEvents();
+
 		MonoBehaviour.print("clientapp::OnDestroy(): end");
 	}
 	
@@ -101,14 +107,14 @@ public KBEngineApp gameapp = null;
 	// fire msg to server
 	public void login()
 	{
-		print("connect to server...(连接到服务端...)");
+		print("login, connect to server...(连接到服务端...)");
 
 		KBEngine.Event.fireIn("login", new object[]{m_stringAccount, m_stringPasswd});
 	}
 
 	public void createAccount()
 	{
-		print("connect to server...(连接到服务端...)");
+		print("createAccount, connect to server...(连接到服务端...)");
 		
 		KBEngine.Event.fireIn("createAccount", new object[]{m_stringAccount, m_stringPasswd});
 	}
@@ -148,6 +154,25 @@ public KBEngineApp gameapp = null;
 
 	public void onDisableConnect()
 	{
+
+	}
+	
+	public void onLoginFailed(UInt16 failedcode)
+	{
+		if(failedcode == 20)
+		{
+			print("login is failed(登陆失败), err=" + KBEngineApp.app.serverErr(failedcode) + ", " + System.Text.Encoding.ASCII.GetString(KBEngineApp.app.serverdatas()));
+		}
+		else
+		{
+			print("login is failed(登陆失败), err=" + KBEngineApp.app.serverErr(failedcode));
+		}
+	}
+
+	public void onLoginSuccessfully(UInt64 rndUUID, Int32 eid, Account accountEntity)
+	{
+		print("login is successfully! (登录成功!)");
+		Application.LoadLevel("FishPool");
 	}
 
 }

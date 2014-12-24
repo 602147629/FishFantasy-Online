@@ -21,6 +21,11 @@ public class LoginCtl : MonoBehaviour {
 
 	public void OnStartBtnClick()
 	{
+		clientApp.login();
+	}
+
+	public void OnRegistBtnClick()
+	{
 		clientApp.createAccount ();
 	}
 }

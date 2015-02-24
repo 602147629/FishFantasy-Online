@@ -2313,59 +2313,59 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1415
-        y: 587
+        y: 570
         width: 176
-        height: 164
+        height: 183
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: fish1_202
       rect:
         serializedVersion: 2
-        x: 1613
-        y: 608
+        x: 1615
+        y: 571
         width: 181
-        height: 136
+        height: 183
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: fish1_203
       rect:
         serializedVersion: 2
-        x: 1815
-        y: 624
+        x: 1820
+        y: 572
         width: 180
-        height: 113
+        height: 183
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: fish1_204
       rect:
         serializedVersion: 2
-        x: 15
-        y: 416
+        x: 22
+        y: 370
         width: 184
-        height: 117
+        height: 183
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: fish1_205
       rect:
         serializedVersion: 2
-        x: 215
-        y: 403
+        x: 222
+        y: 372
         width: 186
-        height: 141
+        height: 183
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: fish1_206
       rect:
         serializedVersion: 2
-        x: 416
-        y: 382
+        x: 425
+        y: 367
         width: 187
-        height: 170
+        height: 183
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}

@@ -36,12 +36,8 @@ public class FishBehaviour : MonoBehaviour {
 
 		iTween.RotateUpdate (gameObject, iTween.Hash ("rotation", new Vector3(0, 0, angle),
 		                                              "time", 0.5f
-				)
-				);
-//		Quaternion changeToRotation = Quaternion.identity;
-//		changeToRotation.eulerAngles = new Vector3 (0, 0, angle);
-//		float speed = 200.0f;
-//		gameObject.transform.rotation = Quaternion.RotateTowards(gameObject.transform.rotation, changeToRotation, speed*Time.deltaTime);
+													 )
+				            );
 
 		lastPosition = gameObject.transform.position;
 	}

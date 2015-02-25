@@ -34,6 +34,9 @@ public class FishBehaviour : MonoBehaviour {
 		Vector3 dir = gameObject.transform.position - lastPosition;
 		float angle = Vector3.Angle(Vector3.right, dir);
 
+		if (dir.y < 0)
+			angle = -angle;
+
 		iTween.RotateUpdate (gameObject, iTween.Hash ("rotation", new Vector3(0, 0, angle),
 		                                              "time", 0.5f
 													 )

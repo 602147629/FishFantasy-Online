@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Groups : MonoBehaviour {
+public class Group : MonoBehaviour {
 
-	public int	groupNum;
+	public int	pathNum;
 	public int	fishNum;
 
 	// Use this for initialization

@@ -7,70 +7,45 @@ public class FishPoolMng : MonoBehaviour {
 	public GameObject roadPrefab;
 	public GameObject fishesPrefab;
 
+	private GameObject road;
+
 	void Awake () {
 
 
 	}
 	// Use this for initialization
 	void Start () {
-
-		//random fish
-		GameObject fishPrefab =  fishesPrefab.transform.Find("黄金鲨").gameObject;
-		GameObject road = Instantiate (roadPrefab) as GameObject;
-
-		//random group
-		GameObject groups = road.transform.Find ("3鱼组").gameObject;
-		Groups groupBeh = groups.GetComponent<Groups> ();
-		//random paths
-		GameObject paths = groups.transform.Find ("path0").gameObject;
-
-		for (int k = 0; k < groupBeh.fishNum; k++) 
-		{
-			string str = k.ToString();
-			GameObject path = paths.transform.Find (str).gameObject;
-			GameObject fish = Instantiate(fishPrefab) as GameObject;
-			FishBehaviour fishBehaviour = fish.GetComponent<FishBehaviour> ();
-			fishBehaviour.itweenPath = path.GetComponent<iTweenPath> ();
-		}
-
-		//random fish
-		fishPrefab =  fishesPrefab.transform.Find("绿金鲨").gameObject;
 		road = Instantiate (roadPrefab) as GameObject;
-		
-		//random group
-		groups = road.transform.Find ("1鱼组").gameObject;
-		groupBeh = groups.GetComponent<Groups> ();
-		//random paths
-		paths = groups.transform.Find ("path0").gameObject;
-		
-		for (int k = 0; k < groupBeh.fishNum; k++) 
-		{
-			string str = k.ToString();
-			GameObject path = paths.transform.Find (str).gameObject;
-			GameObject fish = Instantiate(fishPrefab) as GameObject;
-			FishBehaviour fishBehaviour = fish.GetComponent<FishBehaviour> ();
-			fishBehaviour.itweenPath = path.GetComponent<iTweenPath> ();
-		}
 
-		fishPrefab =  fishesPrefab.transform.Find("蝴蝶鱼").gameObject;
-		road = Instantiate (roadPrefab) as GameObject;
-		
-		//random group
-		groups = road.transform.Find ("1鱼组").gameObject;
-		groupBeh = groups.GetComponent<Groups> ();
-		//random paths
-		paths = groups.transform.Find ("path2").gameObject;
-		
-		for (int k = 0; k < groupBeh.fishNum; k++) 
-		{
-			string str = k.ToString();
-			GameObject path = paths.transform.Find (str).gameObject;
-			GameObject fish = Instantiate(fishPrefab) as GameObject;
-			FishBehaviour fishBehaviour = fish.GetComponent<FishBehaviour> ();
-			fishBehaviour.itweenPath = path.GetComponent<iTweenPath> ();
-		}
+		createFishAndSwimming ("黄金鲨", "1鱼组");
+		createFishAndSwimming ("绿金鲨", "1鱼组");
 
+		createFishAndSwimming ("蝴蝶鱼", "1鱼组");
 
+		createFishAndSwimming ("黄灯笼鱼", "1鱼组");
+		createFishAndSwimming ("红灯笼鱼", "1鱼组");
+		createFishAndSwimming ("绿灯笼鱼", "1鱼组");
+
+		createFishAndSwimming ("绿龟", "1鱼组");
+		createFishAndSwimming ("绿龟", "1鱼组");
+
+		createFishAndSwimming ("金鳝鱼", "1鱼组");
+		createFishAndSwimming ("红鳝鱼", "1鱼组");
+
+		createFishAndSwimming ("小丑鱼", "1鱼组");
+		createFishAndSwimming ("小丑鱼", "1鱼组");
+		createFishAndSwimming ("小丑鱼", "1鱼组");
+		
+		createFishAndSwimming ("小黄鱼", "1鱼组");
+		createFishAndSwimming ("小黄鱼", "1鱼组");
+		createFishAndSwimming ("小黄鱼", "1鱼组");
+		createFishAndSwimming ("小黄鱼", "1鱼组");
+		createFishAndSwimming ("小黄鱼", "1鱼组");
+		createFishAndSwimming ("小黄鱼", "1鱼组");
+		createFishAndSwimming ("小黄鱼", "1鱼组");
+		createFishAndSwimming ("小黄鱼", "1鱼组");
+		createFishAndSwimming ("小黄鱼", "1鱼组");
+		createFishAndSwimming ("小黄鱼", "1鱼组");
 	}
 	
 	// Update is called once per frame
@@ -78,24 +53,37 @@ public class FishPoolMng : MonoBehaviour {
 	
 	}
 
-	private void createFish(string fishName, string groupsName, string pathsName)
+	private void createFishAndSwimming(string fishName, string groupName)
+	{
+		GameObject fishPrefab =  fishesPrefab.transform.Find(fishName).gameObject;
+		
+		
+		GameObject groupObj = road.transform.Find (groupName).gameObject;
+		Group group = groupObj.GetComponent<Group> ();
+
+		GameObject fish = Instantiate(fishPrefab) as GameObject;
+		FishBehaviour fishBehaviour = fish.GetComponent<FishBehaviour> ();
+
+		fishBehaviour.StartSwimming (group);
+	}
+
+	private void createFish(string fishName, string groupName, string pathsName)
 	{
 		GameObject fishPrefab =  fishesPrefab.transform.Find(fishName).gameObject;
 		GameObject road = Instantiate (roadPrefab) as GameObject;
-		
-		//random group
-		GameObject groups = road.transform.Find (groupsName).gameObject;
-		Groups groupBeh = groups.GetComponent<Groups> ();
+
+		GameObject groupObj = road.transform.Find (groupName).gameObject;
+		Group group = groupObj.GetComponent<Group> ();
 		//random paths
-		GameObject paths = groups.transform.Find (pathsName).gameObject;
+		GameObject paths = groupObj.transform.Find (pathsName).gameObject;
 		
-		for (int k = 0; k < groupBeh.fishNum; k++) 
+		for (int k = 0; k < group.fishNum; k++) 
 		{
 			string str = k.ToString();
 			GameObject path = paths.transform.Find (str).gameObject;
 			GameObject fish = Instantiate(fishPrefab) as GameObject;
 			FishBehaviour fishBehaviour = fish.GetComponent<FishBehaviour> ();
-			fishBehaviour.itweenPath = path.GetComponent<iTweenPath> ();
+			//fishBehaviour.itweenPath = path.GetComponent<iTweenPath> ();
 		}
 	}
 }

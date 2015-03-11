@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class FishBehaviour : MonoBehaviour {
-
-
-	public iTweenPath itweenPath;
+	
 	public float speed = 1f;
 
 	private Vector3 lastPosition;
+	
+	private Group group;
 
 	void Awake ()
 	{
@@ -17,14 +18,7 @@ public class FishBehaviour : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		this.transform.position = itweenPath.nodes.ToArray () [0];
 
-		iTween.MoveTo(gameObject, 
-		              iTween.Hash ("path", itweenPath.nodes.ToArray(),
-					               "speed", speed,
-					               "easeType", iTween.EaseType.linear
-		             			  )
-		              );
 
 	}
 	
@@ -43,5 +37,59 @@ public class FishBehaviour : MonoBehaviour {
 				            );
 
 		lastPosition = gameObject.transform.position;
+	}
+
+	public void StartSwimming(Group groupParam)
+	{
+		group = groupParam;
+		int pathNum = group.pathNum;
+
+		int seekSeek = unchecked((int)DateTime.Now.Ticks);
+		System.Random ran=new System.Random(seekSeek);
+		int RandKey=ran.Next(0,pathNum);
+		string pathName = "path" + RandKey.ToString ();
+
+		GameObject path = group.transform.Find (pathName).gameObject;
+		iTweenPath itweenPath = path.transform.Find ("0").gameObject.GetComponent<iTweenPath>();
+
+		if (ran.Next() % 2 == 0) 
+		{
+			itweenPath.nodes.Reverse();
+		}
+		this.transform.position = itweenPath.nodes.ToArray () [0];
+		iTween.MoveTo(gameObject, 
+		              iTween.Hash ("path", itweenPath.nodes.ToArray (),
+		             			   "speed", speed,
+		             			   "easeType", iTween.EaseType.linear,
+		             			   "oncomplete", "OnNextSwimming", 
+		             			   "oncompletetarget", gameObject
+		             			  )
+		              );
+	}
+
+	void OnNextSwimming()
+	{
+		int pathNum = group.pathNum;
+		System.Random ran=new System.Random();
+		int RandKey=ran.Next(0,pathNum);
+		string pathName = "path" + RandKey.ToString ();
+		
+		GameObject path = group.transform.Find (pathName).gameObject;
+		iTweenPath itweenPath = path.transform.Find ("0").gameObject.GetComponent<iTweenPath>();
+		//this.transform.position = itweenPath.nodes.ToArray () [0];
+
+		if (ran.Next() % 2 == 0) 
+		{
+			itweenPath.nodes.Reverse();
+		}
+		this.transform.position = itweenPath.nodes.ToArray () [0];
+		iTween.MoveTo(gameObject, 
+		              iTween.Hash ("path", itweenPath.nodes.ToArray (),
+		             				"speed", speed,
+		             				"easeType", iTween.EaseType.linear,
+		             				"oncomplete", "OnNextSwimming", 
+		             				"oncompletetarget", gameObject
+		            			  )
+		              );
 	}
 }

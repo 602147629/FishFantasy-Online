@@ -18,9 +18,16 @@ public class ClientApp : MonoBehaviour {
 	public int SEND_BUFFER_MAX = (int)KBEngine.NetworkInterface.TCP_PACKET_MAX;
 	public int RECV_BUFFER_MAX = (int)KBEngine.NetworkInterface.TCP_PACKET_MAX;
 
-	private string m_stringAccount = "device_id";
-	private string m_stringPasswd = "";
+    KBEPluginIF pluginIF = null;
 
+    public KBEPluginIF PluginIF
+    {
+
+        get { return this.pluginIF; }
+
+        set { this.pluginIF = value; }
+
+    }
 	void Awake() 
 	{
 		DontDestroyOnLoad(transform.gameObject);
@@ -29,34 +36,19 @@ public class ClientApp : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		MonoBehaviour.print("clientapp::start()");
-		installEvents();
+		MonoBehaviour.print("Clientapp::start()");
 		initKBEngine();
 
+        pluginIF = new KBEPluginIF();
+        pluginIF.RegisterOnConnectStatus(this, "onConnectStatus");
+        pluginIF.RegisterOnDisableConnect(this, "onDisableConnect");
+        pluginIF.RegisterOnKicked(this, "onKicked");
+
+        //需要以后修改的地方，需要加载资源和验证版本后，完全准备好进入登录页面。
 		Application.LoadLevel("Login");
 	}
-
-	void installEvents()
-	{
-		KBEngine.Event.registerOut("onKicked", this, "onKicked");
-		KBEngine.Event.registerOut("onCreateAccountResult", this, "onCreateAccountResult");
-
-		KBEngine.Event.registerOut("onDisableConnect", this, "onDisableConnect");
-		KBEngine.Event.registerOut("onConnectStatus", this, "onConnectStatus");
-
-		KBEngine.Event.registerOut("onLoginFailed", this, "onLoginFailed");
-		KBEngine.Event.registerOut("onLoginSuccessfully", this, "onLoginSuccessfully");
-	}
-
-	void uninstallEvents()
-	{
-		KBEngine.Event.deregisterOut(this);
-	}
-
 	void initKBEngine()
 	{
-		// 如果此处发生错误，请查看 Assets\Scripts\kbe_scripts\if_Entity_error_use______git_submodule_update_____kbengine_plugins_______open_this_file_and_I_will_tell_you.cs
-		
 		KBEngineArgs args = new KBEngineArgs();
 		
 		args.ip = ip;
@@ -85,7 +77,7 @@ public class ClientApp : MonoBehaviour {
 		MonoBehaviour.print("clientapp::OnDestroy(): begin");
 
 		KBEngineApp.app.destroy();
-		uninstallEvents();
+        clientIF.Deregister(this);
 
 		MonoBehaviour.print("clientapp::OnDestroy(): end");
 	}
@@ -104,75 +96,24 @@ public class ClientApp : MonoBehaviour {
 		KBEngine.Event.processOutEvents();
 	}
 
-	// fire msg to server
-	public void login()
-	{
-		print("login, connect to server...(连接到服务端...)");
+    // callback from server msg
+    public void onKicked(UInt16 failedcode)
+    {
+        Debug.Log("kick, disconnect!, reason=" + KBEngineApp.app.serverErr(failedcode));
+    }
 
-		KBEngine.Event.fireIn("login", new object[]{m_stringAccount, m_stringPasswd});
-	}
+    public void onConnectStatus(bool success)
+    {
+        if (!success)
+            Debug.Log("connect is error! (连接错误)");
+        else
+            Debug.Log("connect successfully, please wait...(连接成功，请等候...)");
+    }
 
-	public void createAccount()
-	{
-		print("createAccount, connect to server...(连接到服务端...)");
-		
-		KBEngine.Event.fireIn("createAccount", new object[]{m_stringAccount, m_stringPasswd});
-	}
+    public void onDisableConnect()
+    {
+        Debug.Log("connect is disable! (无法连接)");
+    }
 
-	// callback from server msg
-	public void onCreateAccountResult(UInt16 retcode, byte[] datas)
-	{
-		if(retcode != 0)
-		{
-			print("createAccount is error(注册账号错误)! err=" + KBEngineApp.app.serverErr(retcode));
-			return;
-		}
-		
-		if(KBEngineApp.validEmail(m_stringAccount))
-		{
-			print("createAccount is successfully, Please activate your Email!(注册账号成功，请激活Email!)");
-		}
-		else
-		{
-			print("createAccount is successfully!(注册账号成功!)");
-		}
-	}
-
-	public void onKicked(UInt16 failedcode)
-	{
-		print("kick, disconnect!, reason=" + KBEngineApp.app.serverErr(failedcode));
-		//Application.LoadLevel("login");
-	}
-
-	public void onConnectStatus(bool success)
-	{
-		if(!success)
-			print("connect is error! (连接错误)");
-		else
-			print("connect successfully, please wait...(连接成功，请等候...)");
-	}
-
-	public void onDisableConnect()
-	{
-
-	}
-	
-	public void onLoginFailed(UInt16 failedcode)
-	{
-		if(failedcode == 20)
-		{
-			print("login is failed(登陆失败), err=" + KBEngineApp.app.serverErr(failedcode) + ", " + System.Text.Encoding.ASCII.GetString(KBEngineApp.app.serverdatas()));
-		}
-		else
-		{
-			print("login is failed(登陆失败), err=" + KBEngineApp.app.serverErr(failedcode));
-		}
-	}
-
-	public void onLoginSuccessfully(UInt64 rndUUID, Int32 eid, Account accountEntity)
-	{
-		print("login is successfully! (登录成功!)");
-		Application.LoadLevel("FishPool");
-	}
-
+   
 }

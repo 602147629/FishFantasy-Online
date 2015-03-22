@@ -77,7 +77,7 @@ public class ClientApp : MonoBehaviour {
 		MonoBehaviour.print("clientapp::OnDestroy(): begin");
 
 		KBEngineApp.app.destroy();
-        clientIF.Deregister(this);
+        //clientIF.Deregister(this);
 
 		MonoBehaviour.print("clientapp::OnDestroy(): end");
 	}

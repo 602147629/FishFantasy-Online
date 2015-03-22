@@ -6,6 +6,10 @@ public class FishBehaviour : MonoBehaviour {
 	
 	public float speed = 1f;
 
+    public float startTime = 1.0f;
+
+    public float timeRange = 1.0f;
+
 	private Vector3 lastPosition;
 	
 	private Group group;
@@ -38,37 +42,45 @@ public class FishBehaviour : MonoBehaviour {
 
 		lastPosition = gameObject.transform.position;
 	}
+    IEnumerator FishRun()
+    {
+        yield return new  WaitForSeconds(3.0f);
 
-	public void StartSwimming(Group groupParam)
+        int pathNum = group.pathNum;
+
+        int seekSeek = unchecked((int)DateTime.Now.Ticks);
+        System.Random ran = new System.Random(seekSeek);
+        int RandKey = ran.Next(0, pathNum);
+        string pathName = "path" + RandKey.ToString();
+
+        GameObject path = group.transform.Find(pathName).gameObject;
+        iTweenPath itweenPath = path.transform.Find("0").gameObject.GetComponent<iTweenPath>();
+
+        if (ran.Next() % 2 == 0)
+        {
+            itweenPath.nodes.Reverse();
+        }
+        this.transform.position = itweenPath.nodes.ToArray()[0];
+        iTween.MoveTo(gameObject,
+                      iTween.Hash("path", itweenPath.nodes.ToArray(),
+                                   "speed", speed,
+                                   "easeType", iTween.EaseType.linear,
+                                   "oncomplete", "OnNextSwimming",
+                                   "oncompletetarget", gameObject
+                                  )
+                      );
+    }
+	public void StartSwimmingByRandom(Group groupParam)
 	{
 		group = groupParam;
-		int pathNum = group.pathNum;
 
-		int seekSeek = unchecked((int)DateTime.Now.Ticks);
-		System.Random ran=new System.Random(seekSeek);
-		int RandKey=ran.Next(0,pathNum);
-		string pathName = "path" + RandKey.ToString ();
-
-		GameObject path = group.transform.Find (pathName).gameObject;
-		iTweenPath itweenPath = path.transform.Find ("0").gameObject.GetComponent<iTweenPath>();
-
-		if (ran.Next() % 2 == 0) 
-		{
-			itweenPath.nodes.Reverse();
-		}
-		this.transform.position = itweenPath.nodes.ToArray () [0];
-		iTween.MoveTo(gameObject, 
-		              iTween.Hash ("path", itweenPath.nodes.ToArray (),
-		             			   "speed", speed,
-		             			   "easeType", iTween.EaseType.linear,
-		             			   "oncomplete", "OnNextSwimming", 
-		             			   "oncompletetarget", gameObject
-		             			  )
-		              );
+        StartCoroutine(FishRun());
 	}
 
 	void OnNextSwimming()
 	{
+        new WaitForSeconds(3.0f);
+
 		int pathNum = group.pathNum;
 		System.Random ran=new System.Random();
 		int RandKey=ran.Next(0,pathNum);

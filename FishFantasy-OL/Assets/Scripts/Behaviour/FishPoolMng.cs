@@ -57,14 +57,13 @@ public class FishPoolMng : MonoBehaviour {
 	{
 		GameObject fishPrefab =  fishesPrefab.transform.Find(fishName).gameObject;
 		
-		
 		GameObject groupObj = road.transform.Find (groupName).gameObject;
 		Group group = groupObj.GetComponent<Group> ();
 
 		GameObject fish = Instantiate(fishPrefab) as GameObject;
 		FishBehaviour fishBehaviour = fish.GetComponent<FishBehaviour> ();
 
-		fishBehaviour.StartSwimming (group);
+        fishBehaviour.StartSwimmingByRandom(group);
 	}
 
 	private void createFish(string fishName, string groupName, string pathsName)
